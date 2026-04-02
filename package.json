@@ -1,44 +1,40 @@
 {
-  "name": "n8n-nodes-render-cloud",
+  "name": "@velocity-bpa/n8n-nodes-render-cloud",
   "version": "1.0.0",
-  "description": "A comprehensive n8n community node for Render Cloud providing 12 resources and 80+ operations for service deployment, database management, and infrastructure automation.",
-  "license": "BUSL-1.1",
+  "description": "n8n community node for Render Cloud platform - manage web services, databases, deployments and infrastructure",
+  "keywords": [
+    "n8n-community-node-package",
+    "render",
+    "cloud",
+    "hosting",
+    "deployment",
+    "infrastructure"
+  ],
+  "license": "bsl-catalog",
+  "homepage": "https://docs.n8n.io/integrations/community-nodes/",
   "author": {
     "name": "Velocity BPA",
-    "email": "licensing@velobpa.com",
-    "url": "https://velobpa.com"
+    "email": "support@velocity-bpa.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Velocity-BPA/n8n-nodes-render-cloud.git"
+    "url": "https://github.com/velocity-bpa/n8n-nodes-render-cloud.git"
   },
-  "homepage": "https://github.com/Velocity-BPA/n8n-nodes-render-cloud",
-  "bugs": {
-    "url": "https://github.com/Velocity-BPA/n8n-nodes-render-cloud/issues"
+  "engines": {
+    "node": ">=18.0.0"
   },
-  "keywords": [
-    "n8n",
-    "n8n-community-node-package",
-    "render",
-    "render-cloud",
-    "cloud",
-    "deployment",
-    "devops",
-    "infrastructure",
-    "paas",
-    "postgres",
-    "redis",
-    "webhooks",
-    "automation"
-  ],
+  "packageManager": "pnpm@9.1.4",
   "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc && gulp build:icons",
+    "dev": "tsc --watch",
+    "format": "prettier nodes credentials --write",
+    "lint": "eslint nodes credentials package.json",
+    "lintfix": "eslint nodes credentials package.json --fix",
+    "prepublishOnly": "npm run build"
+  },
   "files": [
-    "dist",
-    "LICENSE",
-    "COMMERCIAL_LICENSE.md",
-    "LICENSING_FAQ.md",
-    "README.md"
+    "dist/**/*"
   ],
   "n8n": {
     "n8nNodesApiVersion": 1,
@@ -46,46 +42,23 @@
       "dist/credentials/RenderCloudApi.credentials.js"
     ],
     "nodes": [
-      "dist/nodes/RenderCloud/RenderCloud.node.js",
-      "dist/nodes/RenderCloud/RenderCloudTrigger.node.js"
+      "dist/nodes/RenderCloud/RenderCloud.node.js"
     ]
   },
-  "scripts": {
-    "build": "tsc && gulp build:icons",
-    "dev": "tsc --watch",
-    "lint": "eslint . --ext .ts",
-    "lint:fix": "eslint . --ext .ts --fix",
-    "format": "prettier --write \"**/*.ts\"",
-    "format:check": "prettier --check \"**/*.ts\"",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
-    "clean": "rimraf dist",
-    "prepublishOnly": "npm run build"
-  },
-  "dependencies": {},
   "devDependencies": {
-    "@types/jest": "^29.5.12",
-    "@types/node": "^20.11.0",
-    "@typescript-eslint/eslint-plugin": "^7.0.0",
-    "@typescript-eslint/parser": "^7.0.0",
+    "@typescript-eslint/parser": "^7.15.0",
+    "@typescript-eslint/eslint-plugin": "^7.15.0",
     "eslint": "^8.56.0",
-    "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-n8n-nodes-base": "^1.16.1",
     "gulp": "^4.0.2",
-    "gulp-rename": "^2.0.0",
-    "gulp-svg2png": "^2.0.2",
-    "jest": "^29.7.0",
     "n8n-workflow": "*",
-    "prettier": "^3.2.0",
-    "rimraf": "^5.0.5",
-    "ts-jest": "^29.1.2",
-    "typescript": "^5.3.3"
+    "prettier": "^3.3.2",
+    "typescript": "~5.2.2"
   },
   "peerDependencies": {
     "n8n-workflow": "*"
   },
-  "engines": {
-    "node": ">=18.0.0"
+  "dependencies": {
+    "axios": "^1.6.0"
   }
 }
