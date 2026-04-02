@@ -8,21 +8,25 @@
 >
 > For licensing information, visit https://velobpa.com/licensing or contact licensing@velobpa.com.
 
-A comprehensive n8n community node for Render Cloud providing 12 resources and 80+ operations for service deployment, database management, and infrastructure automation. Enables workflow automation for web services, static sites, background workers, cron jobs, PostgreSQL databases, and Redis instances through Render's REST API.
+This n8n community node provides comprehensive integration with Render Cloud, enabling automated management of web services, databases, and infrastructure. With 8 resources and 50+ operations, you can deploy applications, manage environments, configure domains, and orchestrate database operations directly within your n8n workflows.
 
-![n8n version](https://img.shields.io/badge/n8n-1.30.0+-blue)
-![Node.js version](https://img.shields.io/badge/node-18+-green)
+![n8n Community Node](https://img.shields.io/badge/n8n-Community%20Node-blue)
 ![License](https://img.shields.io/badge/license-BSL--1.1-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue)
+![Render](https://img.shields.io/badge/Render-Cloud-purple)
+![Docker](https://img.shields.io/badge/Docker-Supported-blue)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Supported-blue)
 
 ## Features
 
-- **12 Resource Categories**: Services, Deploys, Custom Domains, Environment Variables, Secret Files, Projects, Environments, Postgres, Key Value (Redis), Disks, Environment Groups, and Webhooks
-- **80+ Operations**: Full CRUD operations plus specialized actions for each resource type
-- **Webhook Triggers**: Real-time event notifications with signature verification
-- **Cursor-Based Pagination**: Efficient handling of large datasets
-- **Rate Limit Handling**: Built-in rate limit detection and exponential backoff
-- **Database Management**: PostgreSQL operations including PITR recovery, exports, and user management
-- **Infrastructure Automation**: Service scaling, autoscaling configuration, and deployment management
+- **Complete Service Management** - Create, update, deploy, and monitor web services, background workers, and static sites
+- **Database Operations** - Full PostgreSQL and Redis instance lifecycle management with backup and restore capabilities
+- **Environment Control** - Manage environment variables, custom domains, and SSL certificates across all services
+- **Disk Management** - Create, attach, and manage persistent storage volumes for stateful applications
+- **Deployment Automation** - Trigger deployments, monitor build status, and manage rollbacks programmatically
+- **Owner & Team Management** - Handle team permissions, service ownership, and access control
+- **Real-time Monitoring** - Access service logs, metrics, and health status for comprehensive observability
+- **Infrastructure as Code** - Automate entire Render infrastructure provisioning and configuration workflows
 
 ## Installation
 
@@ -37,360 +41,195 @@ A comprehensive n8n community node for Render Cloud providing 12 resources and 8
 ### Manual Installation
 
 ```bash
-# Navigate to your n8n installation directory
 cd ~/.n8n
-
-# Install the package
 npm install n8n-nodes-render-cloud
 ```
 
 ### Development Installation
 
 ```bash
-# Clone the repository
 git clone https://github.com/Velocity-BPA/n8n-nodes-render-cloud.git
 cd n8n-nodes-render-cloud
-
-# Install dependencies
 npm install
-
-# Build the project
 npm run build
-
-# Create symlink to n8n custom nodes directory
 mkdir -p ~/.n8n/custom
 ln -s $(pwd) ~/.n8n/custom/n8n-nodes-render-cloud
-
-# Restart n8n
 n8n start
 ```
 
 ## Credentials Setup
 
-### Render Cloud API
-
-| Property | Type | Required | Description |
-|----------|------|----------|-------------|
-| API Key | String | Yes | API key from Render Dashboard Account Settings |
-
-**How to get your API key:**
-
-1. Log into [Render Dashboard](https://dashboard.render.com)
-2. Navigate to **Account Settings**
-3. Under **API Keys** section, click **Create API Key**
-4. Provide a descriptive name for the key
-5. Copy and securely store the API key (only shown once)
+| Field | Description | Required |
+|-------|-------------|----------|
+| API Key | Your Render API key from Dashboard → Account Settings → API Keys | ✅ |
+| Base URL | Render API base URL (defaults to https://api.render.com/v1) | ❌ |
 
 ## Resources & Operations
 
-### Service
-Manage web services, static sites, background workers, private services, and cron jobs.
+### 1. Service
 
 | Operation | Description |
 |-----------|-------------|
+| Create | Create a new web service, background worker, or static site |
+| Get | Retrieve service details and configuration |
 | List | List all services with optional filtering |
-| Create | Create a new service |
-| Get | Retrieve a service by ID |
-| Update | Update service configuration |
-| Delete | Delete a service |
-| Suspend | Suspend a running service |
+| Update | Update service configuration and settings |
+| Delete | Delete a service and all associated resources |
+| Suspend | Temporarily suspend service operations |
 | Resume | Resume a suspended service |
-| Restart | Restart a service |
-| Scale | Scale instance count |
-| Update Autoscaling | Configure autoscaling settings |
-| Delete Autoscaling | Remove autoscaling configuration |
-| Purge Cache | Purge cache for a web service |
+| Scale | Adjust service scaling and resource allocation |
 
-### Deploy
-Trigger and manage service deployments.
+### 2. Deploy
 
 | Operation | Description |
 |-----------|-------------|
-| List | List deploys for a service |
-| Trigger | Trigger a new deploy |
-| Get | Retrieve deploy details |
-| Cancel | Cancel an in-progress deploy |
-| Rollback | Roll back to a previous deploy |
+| Create | Trigger a new deployment for a service |
+| Get | Get deployment details and status |
+| List | List all deployments for a service |
+| Cancel | Cancel an in-progress deployment |
+| Rollback | Rollback to a previous deployment |
+| Get Logs | Retrieve deployment build and runtime logs |
 
-### Custom Domain
-Manage custom domains for services.
+### 3. Environment
 
 | Operation | Description |
 |-----------|-------------|
-| List | List custom domains for a service |
-| Add | Add a custom domain |
-| Get | Retrieve custom domain details |
+| Get | Retrieve environment variables for a service |
+| Update | Update environment variables |
+| Create Variable | Add a new environment variable |
+| Delete Variable | Remove an environment variable |
+| List Secrets | List all secret environment variables |
+| Bulk Update | Update multiple environment variables at once |
+
+### 4. Custom Domain
+
+| Operation | Description |
+|-----------|-------------|
+| Create | Add a custom domain to a service |
+| Get | Get custom domain configuration and status |
+| List | List all custom domains for a service |
+| Update | Update domain settings and SSL configuration |
 | Delete | Remove a custom domain |
-| Verify DNS | Verify DNS configuration |
+| Verify | Verify domain ownership and DNS configuration |
 
-### Environment Variable
-Manage environment variables for services.
-
-| Operation | Description |
-|-----------|-------------|
-| List | List environment variables |
-| Get | Retrieve a specific variable |
-| Add or Update | Add or update a variable |
-| Delete | Delete a variable |
-| Update All | Replace all variables |
-
-### Secret File
-Manage secret files for services.
+### 5. Disk
 
 | Operation | Description |
 |-----------|-------------|
-| List | List secret files |
-| Get | Retrieve a specific secret file |
-| Add or Update | Add or update a secret file |
-| Delete | Delete a secret file |
-| Update All | Replace all secret files |
-
-### Project
-Manage Render projects for organizing resources.
-
-| Operation | Description |
-|-----------|-------------|
-| List | List all projects |
-| Create | Create a new project |
-| Get | Retrieve project details |
-| Update | Update project configuration |
-| Delete | Delete a project |
-
-### Environment
-Manage environments within projects.
-
-| Operation | Description |
-|-----------|-------------|
-| List | List environments in a project |
-| Create | Create a new environment |
-| Get | Retrieve environment details |
-| Update | Update environment configuration |
-| Delete | Delete an environment |
-| Add Resources | Add services/databases to environment |
-| Remove Resources | Remove resources from environment |
-
-### Postgres
-Manage PostgreSQL database instances.
-
-| Operation | Description |
-|-----------|-------------|
-| List | List PostgreSQL instances |
-| Create | Create a new instance |
-| Get | Retrieve instance details |
-| Update | Update configuration |
-| Delete | Delete an instance |
-| Get Connection Info | Get connection credentials |
-| Suspend | Suspend an instance |
-| Resume | Resume a suspended instance |
-| Restart | Restart an instance |
-| Failover | Trigger manual failover (HA) |
-| Get Recovery Status | Get PITR recovery status |
-| Trigger Recovery | Restore from a point in time |
-| List Exports | List database exports |
-| Create Export | Create a database export |
-| List Users | List PostgreSQL users |
-| Create User | Create a user |
-| Delete User | Delete a user |
-
-### Key Value (Redis)
-Manage Redis/Key Value instances.
-
-| Operation | Description |
-|-----------|-------------|
-| List | List Key Value instances |
-| Create | Create a new instance |
-| Get | Retrieve instance details |
-| Update | Update configuration |
-| Delete | Delete an instance |
-| Get Connection Info | Get connection credentials |
-| Suspend | Suspend an instance |
-| Resume | Resume a suspended instance |
-
-### Disk
-Manage persistent disks and snapshots.
-
-| Operation | Description |
-|-----------|-------------|
-| List | List disks for a service |
-| Add | Add a disk to a service |
-| Get | Retrieve disk details |
+| Create | Create a new persistent disk |
+| Get | Get disk details and usage information |
+| List | List all disks |
 | Update | Update disk configuration |
-| Delete | Delete a disk |
-| List Snapshots | List disk snapshots |
-| Restore Snapshot | Restore from a snapshot |
+| Delete | Delete a disk and all data |
+| Attach | Attach disk to a service |
+| Detach | Detach disk from a service |
 
-### Environment Group
-Manage shared environment variables and secrets across services.
-
-| Operation | Description |
-|-----------|-------------|
-| List | List environment groups |
-| Create | Create a new environment group |
-| Get | Retrieve environment group details |
-| Update | Update environment group |
-| Delete | Delete an environment group |
-| Link Service | Link a service to the group |
-| Unlink Service | Unlink a service from the group |
-| Get Env Var | Get a specific environment variable |
-| Update Env Var | Add or update an environment variable |
-| Delete Env Var | Remove an environment variable |
-| Get Secret File | Get a specific secret file |
-| Update Secret File | Add or update a secret file |
-| Delete Secret File | Remove a secret file |
-
-### Webhook
-Manage webhooks for event notifications.
+### 6. PostgreSQL Database
 
 | Operation | Description |
 |-----------|-------------|
-| List | List webhooks for a workspace |
-| Create | Create a new webhook |
-| Get | Retrieve webhook details |
-| Update | Update webhook configuration |
-| Delete | Delete a webhook |
-| List Events | List events delivered to a webhook |
+| Create | Create a new PostgreSQL database instance |
+| Get | Get database details and connection information |
+| List | List all PostgreSQL databases |
+| Update | Update database configuration |
+| Delete | Delete database instance |
+| Get Connection | Get database connection string and credentials |
+| Create Backup | Create a manual database backup |
+| List Backups | List all available backups |
+| Restore | Restore database from backup |
 
-## Trigger Node
+### 7. Redis Instance
 
-### Render Cloud Trigger
+| Operation | Description |
+|-----------|-------------|
+| Create | Create a new Redis instance |
+| Get | Get Redis instance details |
+| List | List all Redis instances |
+| Update | Update Redis configuration |
+| Delete | Delete Redis instance |
+| Get Connection | Get Redis connection information |
+| Flush | Flush Redis database |
 
-Starts the workflow when Render Cloud events occur.
+### 8. Owner
 
-**Supported Events:**
-- `deploy_started` - Deploy has started
-- `deploy_succeeded` - Deploy completed successfully
-- `deploy_failed` - Deploy failed
-- `deploy_canceled` - Deploy was canceled
-- `service_created` - New service created
-- `service_deleted` - Service deleted
-- `service_suspended` - Service suspended
-- `service_resumed` - Service resumed
-- `server_failed` - Server failure detected
-- `server_available` - Server recovered
-- `certificate_renewed` - TLS certificate renewed
-- `maintenance_started` - Maintenance started
-- `maintenance_completed` - Maintenance completed
-
-**Features:**
-- Automatic webhook creation and cleanup
-- Webhook signature verification for security
-- Filter events by specific service IDs
+| Operation | Description |
+|-----------|-------------|
+| Get | Get owner/team information |
+| List | List team members and permissions |
+| Update | Update team settings |
+| Invite | Invite new team members |
+| Remove | Remove team members |
+| Transfer | Transfer service ownership |
 
 ## Usage Examples
 
-### List All Services
-
 ```javascript
-// Configure the Render Cloud node
-// Resource: Service
-// Operation: List
-// Returns all services in your workspace
+// Deploy a new web service
+{
+  "name": "my-api-service",
+  "type": "web_service",
+  "repo": "https://github.com/myorg/api-service.git",
+  "branch": "main",
+  "buildCommand": "npm run build",
+  "startCommand": "npm start",
+  "envVars": {
+    "NODE_ENV": "production",
+    "PORT": "10000"
+  }
+}
 ```
 
-### Trigger a Deploy
-
 ```javascript
-// Resource: Deploy
-// Operation: Trigger
-// Service ID: srv-abc123
-// Clear Cache: true
+// Create PostgreSQL database with backup schedule
+{
+  "name": "production-db",
+  "plan": "standard",
+  "region": "oregon",
+  "version": "15",
+  "backup_schedule": "daily"
+}
 ```
 
-### Create a PostgreSQL Database
-
 ```javascript
-// Resource: Postgres
-// Operation: Create
-// Owner ID: usr-xxxxx
-// Name: my-database
-// Region: oregon
-// Plan: starter
-// PostgreSQL Version: 16
+// Configure custom domain with SSL
+{
+  "domain": "api.mycompany.com",
+  "service_id": "srv-abc123",
+  "ssl_enabled": true,
+  "redirect_for_name": true
+}
 ```
 
-### Scale a Service
-
 ```javascript
-// Resource: Service
-// Operation: Scale
-// Service ID: srv-abc123
-// Number of Instances: 3
+// Update environment variables for service
+{
+  "service_id": "srv-abc123",
+  "env_vars": {
+    "DATABASE_URL": "postgresql://user:pass@host:5432/db",
+    "REDIS_URL": "redis://host:6379",
+    "API_KEY": "secret-key-value"
+  }
+}
 ```
-
-## Render Concepts
-
-### Service Types
-- **Web Service**: Long-running web applications
-- **Static Site**: Static HTML/CSS/JS hosting
-- **Background Worker**: Long-running background processes
-- **Private Service**: Internal services not exposed to internet
-- **Cron Job**: Scheduled tasks
-
-### Regions
-| Region | Location |
-|--------|----------|
-| oregon | US West (Oregon) |
-| ohio | US East (Ohio) |
-| virginia | US East (Virginia) |
-| frankfurt | Europe (Frankfurt) |
-| singapore | Asia Pacific (Singapore) |
-
-### Plans
-- **free**: Free tier with limitations
-- **starter**: Entry-level paid tier
-- **standard**: Standard production tier
-- **pro**: Professional tier
-- **pro_plus**: Enhanced professional tier
-- **pro_max**: Maximum performance tier
-- **pro_ultra**: Ultimate performance tier
 
 ## Error Handling
 
-The node handles common Render API errors:
-
-| Error Code | Description |
-|------------|-------------|
-| 400 | Bad Request - Invalid parameters |
-| 401 | Unauthorized - Invalid API key |
-| 403 | Forbidden - Insufficient permissions |
-| 404 | Not Found - Resource doesn't exist |
-| 409 | Conflict - Resource state conflict |
-| 422 | Unprocessable - Validation errors |
-| 429 | Rate Limited - Too many requests |
-| 500 | Server Error - Render API issue |
-
-Rate limiting is handled automatically with exponential backoff.
-
-## Security Best Practices
-
-1. **Store API keys securely**: Use n8n credentials, never hardcode
-2. **Use webhook signatures**: Enable signature verification for triggers
-3. **Limit API key scope**: Create keys with minimal required permissions
-4. **Rotate keys regularly**: Periodically regenerate API keys
-5. **Use environment groups**: Share secrets securely across services
+| Error | Description | Solution |
+|-------|-------------|----------|
+| 401 Unauthorized | Invalid or missing API key | Verify API key in credentials configuration |
+| 403 Forbidden | Insufficient permissions | Check team permissions and service ownership |
+| 404 Not Found | Service or resource doesn't exist | Verify resource ID and check if resource was deleted |
+| 422 Validation Error | Invalid request parameters | Review API documentation and fix parameter values |
+| 429 Rate Limited | Too many requests | Implement retry logic with exponential backoff |
+| 500 Internal Error | Render API server error | Check Render status page and retry request |
 
 ## Development
 
 ```bash
-# Install dependencies
 npm install
-
-# Build the project
 npm run build
-
-# Run linting
-npm run lint
-
-# Fix linting issues
-npm run lint:fix
-
-# Run tests
 npm test
-
-# Run tests with coverage
-npm run test:coverage
-
-# Watch mode for development
+npm run lint
 npm run dev
 ```
 
@@ -408,32 +247,24 @@ This n8n community node is licensed under the **Business Source License 1.1**.
 Permitted for personal, educational, research, and internal business use.
 
 ### Commercial Use
-Use of this node within any SaaS, PaaS, hosted platform, managed service,
-or paid automation offering requires a commercial license.
+Use of this node within any SaaS, PaaS, hosted platform, managed service, or paid automation offering requires a commercial license.
 
-For licensing inquiries:
-**licensing@velobpa.com**
+For licensing inquiries: **licensing@velobpa.com**
 
 See [LICENSE](LICENSE), [COMMERCIAL_LICENSE.md](COMMERCIAL_LICENSE.md), and [LICENSING_FAQ.md](LICENSING_FAQ.md) for details.
 
 ## Contributing
 
-Contributions are welcome! Please follow these steps:
+Contributions are welcome! Please ensure:
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+1. Code follows existing style conventions
+2. All tests pass (`npm test`)
+3. Linting passes (`npm run lint`)
+4. Documentation is updated for new features
+5. Commit messages are descriptive
 
 ## Support
 
 - **Issues**: [GitHub Issues](https://github.com/Velocity-BPA/n8n-nodes-render-cloud/issues)
-- **Documentation**: [Render API Docs](https://api-docs.render.com/)
-- **n8n Community**: [n8n Community Forum](https://community.n8n.io/)
-
-## Acknowledgments
-
-- [Render](https://render.com) for providing an excellent cloud platform and API
-- [n8n](https://n8n.io) for the workflow automation platform
-- The n8n community for inspiration and support
+- **Render API Docs**: [Render API Documentation](https://api-docs.render.com/)
+- **Render Community**: [Render Community Forum](https://community.render.com/)
